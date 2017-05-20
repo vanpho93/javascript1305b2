@@ -1,8 +1,14 @@
-const data = `<rss xmlns:slash="http://purl.org/rss/1.0/modules/slash/" version="2.0">
+let data = `<rss xmlns:slash="http://purl.org/rss/1.0/modules/slash/" version="2.0">
 <channel>
 <title>Tin mới nhất - VnExpress RSS</title>
 <description>VnExpress RSS</description>
-<image>...</image>
+<image>
+<url>
+https://s.vnecdn.net/vnexpress/i/v20/logos/vne_logo_rss.png
+</url>
+<title>Tin nhanh VnExpress - Đọc báo, tin tức online 24h</title>
+<link>http://vnexpress.net</link>
+</image>
 <pubDate>Sat, 20 May 2017 15:01:44 +0700</pubDate>
 <generator>VnExpress</generator>
 <link>http://vnexpress.net/rss/tin-moi-nhat.rss</link>
@@ -40,7 +46,24 @@ http://vnexpress.net/tin-tuc/giao-duc/hoc-tieng-anh/hoc-tieng-anh-qua-bai-hat-we
 </guid>
 <slash:comments>0</slash:comments>
 </item>
-<item>...</item>
+<item>
+<title>
+Chiến dịch trả đũa bí mật của Hàn Quốc trên đất Triều Tiên
+</title>
+<description>
+<![CDATA[
+<a href="http://vnexpress.net/tin-tuc/the-gioi/quan-su/chien-dich-tra-dua-bi-mat-cua-han-quoc-tren-dat-trieu-tien-3586964.html"><img width=130 height=100 src="http://img.f30.vnecdn.net/2017/05/19/ROKSF-1495184070_180x108.jpg" ></a></br>Hàn Quốc từng tiến hành nhiều hoạt động bí mật trên lãnh thổ Triều Tiên để đáp trả những hành động khiêu khích vào cuối thập niên 1960.
+]]>
+</description>
+<pubDate>Sat, 20 May 2017 15:00:00 +0700</pubDate>
+<link>
+http://vnexpress.net/tin-tuc/the-gioi/quan-su/chien-dich-tra-dua-bi-mat-cua-han-quoc-tren-dat-trieu-tien-3586964.html
+</link>
+<guid>
+http://vnexpress.net/tin-tuc/the-gioi/quan-su/chien-dich-tra-dua-bi-mat-cua-han-quoc-tren-dat-trieu-tien-3586964.html
+</guid>
+<slash:comments>0</slash:comments>
+</item>
 <item>
 <title>
 Ga La Khê đường sắt trên cao mở cửa đón người dân tham quan
@@ -370,9 +393,7 @@ http://vnexpress.net/tin-tuc/cong-dong/video/oto-bi-trom-vat-sach-guong-sau-mot-
 <slash:comments>0</slash:comments>
 </item>
 <item>
-<title>
-Huế áp dụng thẻ từ thay vé giấy tham quan các điểm di tích
-</title>
+<title>...</title>
 <description>
 <![CDATA[
 <a href="http://dulich.vnexpress.net/tin-tuc/viet-nam/hue/hue-ap-dung-the-tu-thay-ve-giay-tham-quan-cac-diem-di-tich-3587201.html"><img width=130 height=100 src="http://img.f36.dulich.vnecdn.net/2017/05/19/hue1-1495179732_180x108.jpg" ></a></br>Du khách đến thăm các điểm trong hệ thống Trung tâm bảo tồn di tích cố đô Huế như Đại Nội, lăng Tự Đức, lăng Minh Mạng... mua vé là thẻ từ, qua cửa kiểm soát tự động thay vì vé giấy như trước.
@@ -430,4 +451,47 @@ class Tin {
         this.link = link;
     }
 }
+//Cat dau
+const start = data.indexOf('<item>');
+data = data.substring(start);
 
+// console.log(data);
+
+let a = data.split(/<\/item>\s*?<item>/g);
+// console.log(a.length);
+
+// console.log(a[2]);
+
+const item = `
+<title>2 món ngon cho người đái tháo đường</title>
+<description>
+<![CDATA[
+<a href="http://suckhoe.vnexpress.net/tin-tuc/dinh-duong/thuc-don/2-mon-ngon-cho-nguoi-dai-thao-duong-3587577.html"><img width=130 height=100 src="http://img.f42.suckhoe.vnecdn.net/2017/05/20/monngondtd1-nutifood-6883-1495246368_180x108.jpg" ></a></br>Canh cải soong nấu tôm, khổ qua xào trứng là 2 món ăn dễ chế biến phù hợp cho người bị tiểu đường.
+]]>
+</description>
+<pubDate>Sat, 20 May 2017 13:05:40 +0700</pubDate>
+<link>
+http://suckhoe.vnexpress.net/tin-tuc/dinh-duong/thuc-don/2-mon-ngon-cho-nguoi-dai-thao-duong-3587577.html
+</link>
+<guid>
+http://suckhoe.vnexpress.net/tin-tuc/dinh-duong/thuc-don/2-mon-ngon-cho-nguoi-dai-thao-duong-3587577.html
+</guid>
+<slash:comments>0</slash:comments>`;
+
+function getBody(str, pre, post) {
+    const startIndex = str.indexOf(pre) + pre.length;
+    const endIndex = str.indexOf(post);
+    return str.substring(startIndex, endIndex);
+}
+
+function getNewsFromItem(a) {
+    const title = getBody(a, '<title>', '</title>');
+    const desc = getBody(a, '</a></br>', ']]>').trim();
+    const image = getBody(a, 'src="', '" ></a>').trim();
+    const link = getBody(a, '<a href=', '"><img').trim();
+    return new Tin(title, desc, image, link);
+}
+
+const kq = a.map(getNewsFromItem);
+
+console.log(kq);
