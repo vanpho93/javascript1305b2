@@ -2,11 +2,13 @@
 
 // console.log(khoa.age);
 
-// function Person(ten, tuoi) {
-//     this.name = ten;
-//     this.age = tuoi;
-//     this.sayHello = () => console.log(this.name + ' Xin chao')
-// }
+function Person(ten, tuoi) {
+    this.name = ten;
+    this.age = tuoi;
+    this.sayHello = function(){ 
+        console.log(this.name + ' Xin chao'); 
+    }
+}
 
 // const pho = new Person('PHOO');
 // const phat = new Person('PHAT ');
@@ -14,21 +16,23 @@
 
 // pho.sayHello();
 
-class Person {
-    constructor(name, age) {
-        this.name = name;
-        this.age = age;
-    }
+// class Person {
+//     constructor(name, age) {
+//         this.name = name;
+//         this.age = age;
+//     }
 
-    sayHello() {
-        console.log(this.name + ' xin chao!');
-    }
+//     sayHello() {
+//         console.log(this.name + ' xin chao!');
+//     }
+// }
 
-    get balance() {
-        return 100
-    }
-}
+const pho = new Person('PHOO', 19);
+const { name, age, sayHello } = pho;
+// const name = pho.name
+// const age = pho.age;
+// const { age } = pho;
 
-const pho = new Person('PHOO');
-console.log(pho);
 pho.sayHello();
+
+console.log(name, age);
